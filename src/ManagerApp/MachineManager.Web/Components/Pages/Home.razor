@@ -1,7 +1,229 @@
-﻿@page "/"
+@page "/"
 
-<PageTitle>Home</PageTitle>
+<PageTitle>Machine Management Dashboard</PageTitle>
 
-<h1>Hello, world!</h1>
+<div class="hero-section">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="display-4 text-primary">
+                    <i class="fas fa-industry"></i>
+                    Machine Management System
+                </h1>
+                <p class="lead">Industrial monitoring and control dashboard</p>
+            </div>
+        </div>
+    </div>
+</div>
 
-Welcome to your new app.
+<div class="dashboard-section">
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Machine Status Overview -->
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-primary shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                    Total Machines
+                                </div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">124</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-cog fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Running Machines -->
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-success shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                    Running
+                                </div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">98</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-play-circle fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Idle Machines -->
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-warning shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                    Idle
+                                </div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">18</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-pause-circle fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Error/Maintenance -->
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-danger shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+                                    Alerts
+                                </div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">8</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-exclamation-triangle fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">
+                            <i class="fas fa-list"></i>
+                            Recent Machine Activity
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Time</th>
+                                        <th>Machine</th>
+                                        <th>Status</th>
+                                        <th>Message</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>12:34:56</td>
+                                        <td>BMW-Line1-Station2-M001</td>
+                                        <td><span class="badge badge-success">Running</span></td>
+                                        <td>Production cycle completed</td>
+                                    </tr>
+                                    <tr>
+                                        <td>12:33:21</td>
+                                        <td>AUDI-Line3-Station1-M005</td>
+                                        <td><span class="badge badge-warning">Idle</span></td>
+                                        <td>Waiting for material</td>
+                                    </tr>
+                                    <tr>
+                                        <td>12:32:15</td>
+                                        <td>MB-Line2-Station4-M012</td>
+                                        <td><span class="badge badge-danger">Error</span></td>
+                                        <td>Temperature sensor fault</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- System Status -->
+            <div class="col-lg-4">
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">
+                            <i class="fas fa-server"></i>
+                            System Status
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <small class="form-text text-muted">API Connection</small>
+                            <div class="progress">
+                                <div class="progress-bar bg-success" style="width: 100%">Online</div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <small class="form-text text-muted">Database</small>
+                            <div class="progress">
+                                <div class="progress-bar bg-success" style="width: 100%">Connected</div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <small class="form-text text-muted">System Load</small>
+                            <div class="progress">
+                                <div class="progress-bar bg-warning" style="width: 68%">68%</div>
+                            </div>
+                        </div>
+                        <hr>
+                        <p class="text-center mb-0">
+                            <i class="fas fa-clock"></i>
+                            Last Update: <span id="last-update">@DateTime.Now.ToString("HH:mm:ss")</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .hero-section {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 2rem 0;
+        margin-bottom: 2rem;
+    }
+
+    .dashboard-section {
+        padding: 1rem 0;
+    }
+
+    .border-left-primary {
+        border-left: 0.25rem solid #4e73df !important;
+    }
+
+    .border-left-success {
+        border-left: 0.25rem solid #1cc88a !important;
+    }
+
+    .border-left-warning {
+        border-left: 0.25rem solid #f6c23e !important;
+    }
+
+    .border-left-danger {
+        border-left: 0.25rem solid #e74a3b !important;
+    }
+
+    .text-gray-300 {
+        color: #dddfeb !important;
+    }
+
+    .text-gray-800 {
+        color: #5a5c69 !important;
+    }
+</style>
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        // Initialize dashboard data
+        await base.OnInitializedAsync();
+    }
+}

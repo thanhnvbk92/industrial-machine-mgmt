@@ -1,0 +1,32 @@
+# Blazor Manager Dockerfile
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+WORKDIR /app
+EXPOSE 8080
+EXPOSE 8081
+
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+ARG BUILD_CONFIGURATION=Release
+WORKDIR /src
+
+# Copy csproj files and restore as distinct layers
+COPY ["src/ManagerApp/MachineManager.Web/MachineManager.Web.csproj", "src/ManagerApp/MachineManager.Web/"]
+RUN dotnet restore "src/ManagerApp/MachineManager.Web/MachineManager.Web.csproj"
+
+# Copy everything else and build
+COPY . .
+WORKDIR "/src/src/ManagerApp/MachineManager.Web"
+RUN dotnet build "MachineManager.Web.csproj" -c $BUILD_CONFIGURATION -o /app/build
+
+FROM build AS publish
+ARG BUILD_CONFIGURATION=Release
+RUN dotnet publish "MachineManager.Web.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+
+# Set environment variables
+ENV ASPNETCORE_ENVIRONMENT=Production
+ENV ASPNETCORE_URLS=http://+:8080
+
+ENTRYPOINT ["dotnet", "MachineManager.Web.dll"]

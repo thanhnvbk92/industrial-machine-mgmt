@@ -1,0 +1,297 @@
+@page "/machines"
+
+<PageTitle>Machine Management</PageTitle>
+
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">
+        <i class="fas fa-cogs"></i>
+        Machine Management
+    </h1>
+    <button class="btn btn-primary btn-sm">
+        <i class="fas fa-plus"></i>
+        Add Machine
+    </button>
+</div>
+
+<!-- Machine Status Filter -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card shadow">
+            <div class="card-header">
+                <h6 class="m-0 font-weight-bold text-primary">Filter & Search</h6>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label for="statusFilter" class="form-label">Status</label>
+                        <select class="form-select" id="statusFilter" @onchange="OnStatusFilterChanged">
+                            <option value="">All Status</option>
+                            <option value="Running">Running</option>
+                            <option value="Idle">Idle</option>
+                            <option value="Maintenance">Maintenance</option>
+                            <option value="Error">Error</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="buyerFilter" class="form-label">Buyer</label>
+                        <select class="form-select" id="buyerFilter">
+                            <option value="">All Buyers</option>
+                            <option value="BMW">BMW</option>
+                            <option value="Audi">Audi</option>
+                            <option value="Mercedes">Mercedes</option>
+                            <option value="Volkswagen">Volkswagen</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="searchMachine" class="form-label">Search Machine</label>
+                        <input type="text" class="form-control" id="searchMachine" placeholder="Search by name or serial...">
+                    </div>
+                    <div class="col-md-2 d-flex align-items-end">
+                        <button class="btn btn-outline-secondary w-100">
+                            <i class="fas fa-search"></i>
+                            Search
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Machines Grid -->
+<div class="row">
+    @foreach (var machine in FilteredMachines)
+    {
+        <div class="col-xl-4 col-lg-6 col-md-6 mb-4">
+            <div class="card @GetCardClass(machine.Status) shadow h-100">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h6 class="m-0 font-weight-bold">@machine.Name</h6>
+                    <span class="badge @GetStatusBadgeClass(machine.Status)">
+                        @machine.Status
+                    </span>
+                </div>
+                <div class="card-body">
+                    <div class="machine-details">
+                        <p class="mb-1">
+                            <strong>Serial:</strong> @machine.SerialNumber
+                        </p>
+                        <p class="mb-1">
+                            <strong>Model:</strong> @machine.Model
+                        </p>
+                        <p class="mb-1">
+                            <strong>Location:</strong> @machine.Location
+                        </p>
+                        <p class="mb-1">
+                            <strong>Last Update:</strong> @machine.LastUpdate.ToString("HH:mm:ss")
+                        </p>
+                    </div>
+                    
+                    <div class="machine-metrics mt-3">
+                        <div class="row text-center">
+                            <div class="col-4">
+                                <div class="metric-box">
+                                    <div class="metric-value">@machine.Temperature°C</div>
+                                    <div class="metric-label">Temp</div>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="metric-box">
+                                    <div class="metric-value">@machine.Cycles</div>
+                                    <div class="metric-label">Cycles</div>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="metric-box">
+                                    <div class="metric-value">@machine.Efficiency%</div>
+                                    <div class="metric-label">Efficiency</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="btn-group w-100" role="group">
+                        <button class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-eye"></i>
+                            Details
+                        </button>
+                        <button class="btn btn-outline-secondary btn-sm">
+                            <i class="fas fa-chart-line"></i>
+                            Logs
+                        </button>
+                        <button class="btn btn-outline-warning btn-sm">
+                            <i class="fas fa-wrench"></i>
+                            Control
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<style>
+    .machine-details p {
+        font-size: 0.9rem;
+        color: #6c757d;
+    }
+
+    .metric-box {
+        padding: 0.5rem;
+        border-radius: 0.25rem;
+        background-color: #f8f9fc;
+    }
+
+    .metric-value {
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: #5a5c69;
+    }
+
+    .metric-label {
+        font-size: 0.75rem;
+        color: #858796;
+        text-transform: uppercase;
+    }
+
+    .card.border-left-success {
+        border-left: 0.25rem solid #1cc88a !important;
+    }
+
+    .card.border-left-warning {
+        border-left: 0.25rem solid #f6c23e !important;
+    }
+
+    .card.border-left-danger {
+        border-left: 0.25rem solid #e74a3b !important;
+    }
+
+    .card.border-left-info {
+        border-left: 0.25rem solid #36b9cc !important;
+    }
+</style>
+
+@code {
+    private string selectedStatus = "";
+
+    private List<MachineViewModel> machines = new()
+    {
+        new() { 
+            Name = "BMW-L1-S1-M001", 
+            SerialNumber = "BMW001", 
+            Model = "CNC Miller 3000", 
+            Location = "BMW Line 1 Station 1",
+            Status = MachineStatus.Running,
+            Temperature = 45,
+            Cycles = 1250,
+            Efficiency = 96,
+            LastUpdate = DateTime.Now.AddMinutes(-2)
+        },
+        new() { 
+            Name = "AUDI-L2-S3-M005", 
+            SerialNumber = "AUD005", 
+            Model = "Robotic Welder X1", 
+            Location = "Audi Line 2 Station 3",
+            Status = MachineStatus.Idle,
+            Temperature = 25,
+            Cycles = 890,
+            Efficiency = 78,
+            LastUpdate = DateTime.Now.AddMinutes(-5)
+        },
+        new() { 
+            Name = "MB-L3-S2-M012", 
+            SerialNumber = "MER012", 
+            Model = "Paint Sprayer Pro", 
+            Location = "Mercedes Line 3 Station 2",
+            Status = MachineStatus.Error,
+            Temperature = 85,
+            Cycles = 445,
+            Efficiency = 45,
+            LastUpdate = DateTime.Now.AddMinutes(-1)
+        },
+        new() { 
+            Name = "VW-L1-S4-M008", 
+            SerialNumber = "VW008", 
+            Model = "Assembly Robot V2", 
+            Location = "VW Line 1 Station 4",
+            Status = MachineStatus.Maintenance,
+            Temperature = 30,
+            Cycles = 0,
+            Efficiency = 0,
+            LastUpdate = DateTime.Now.AddHours(-2)
+        },
+        new() { 
+            Name = "BMW-L2-S2-M015", 
+            SerialNumber = "BMW015", 
+            Model = "Quality Scanner QS1", 
+            Location = "BMW Line 2 Station 2",
+            Status = MachineStatus.Running,
+            Temperature = 38,
+            Cycles = 2150,
+            Efficiency = 92,
+            LastUpdate = DateTime.Now.AddSeconds(-30)
+        },
+        new() { 
+            Name = "AUDI-L1-S1-M003", 
+            SerialNumber = "AUD003", 
+            Model = "Drilling Station D5", 
+            Location = "Audi Line 1 Station 1",
+            Status = MachineStatus.Running,
+            Temperature = 42,
+            Cycles = 1680,
+            Efficiency = 88,
+            LastUpdate = DateTime.Now.AddMinutes(-1)
+        }
+    };
+
+    private IEnumerable<MachineViewModel> FilteredMachines =>
+        string.IsNullOrEmpty(selectedStatus) 
+            ? machines 
+            : machines.Where(m => m.Status.ToString() == selectedStatus);
+
+    private void OnStatusFilterChanged(ChangeEventArgs e)
+    {
+        selectedStatus = e.Value?.ToString() ?? "";
+    }
+
+    private string GetCardClass(MachineStatus status) => status switch
+    {
+        MachineStatus.Running => "border-left-success",
+        MachineStatus.Idle => "border-left-warning",
+        MachineStatus.Error => "border-left-danger",
+        MachineStatus.Maintenance => "border-left-info",
+        _ => ""
+    };
+
+    private string GetStatusBadgeClass(MachineStatus status) => status switch
+    {
+        MachineStatus.Running => "badge-success",
+        MachineStatus.Idle => "badge-warning",
+        MachineStatus.Error => "badge-danger",
+        MachineStatus.Maintenance => "badge-info",
+        _ => "badge-secondary"
+    };
+
+    public class MachineViewModel
+    {
+        public string Name { get; set; } = string.Empty;
+        public string SerialNumber { get; set; } = string.Empty;
+        public string Model { get; set; } = string.Empty;
+        public string Location { get; set; } = string.Empty;
+        public MachineStatus Status { get; set; }
+        public int Temperature { get; set; }
+        public int Cycles { get; set; }
+        public int Efficiency { get; set; }
+        public DateTime LastUpdate { get; set; }
+    }
+
+    public enum MachineStatus
+    {
+        Stopped,
+        Running,
+        Idle,
+        Maintenance,
+        Error,
+        Warning
+    }
+}
