@@ -1,0 +1,75 @@
+version: '3.8'
+
+services:
+  # MySQL Database
+  mysql-db:
+    image: mysql:8.0
+    container_name: machine-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: production_password
+      MYSQL_DATABASE: MachineManagementDB
+      MYSQL_USER: machine_user
+      MYSQL_PASSWORD: machine_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql:ro
+    networks:
+      - machine-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+
+  # Backend API
+  machine-api:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: machine-api
+    restart: unless-stopped
+    ports:
+      - "5000:8080"
+    depends_on:
+      mysql-db:
+        condition: service_healthy
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ConnectionStrings__DefaultConnection=Server=mysql-db;Database=MachineManagementDB;Uid=root;Pwd=production_password;
+      - Serilog__MinimumLevel__Default=Information
+    volumes:
+      - ./logs:/app/logs
+    networks:
+      - machine-network
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8080/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Blazor Manager Web (Optional - can be run separately)
+  machine-manager:
+    build:
+      context: .
+      dockerfile: Dockerfile.Manager
+    container_name: machine-manager
+    restart: unless-stopped
+    ports:
+      - "5001:8080"
+    depends_on:
+      - machine-api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ApiSettings__BaseUrl=http://machine-api:8080
+    networks:
+      - machine-network
+
+volumes:
+  mysql_data:
+    driver: local
+
+networks:
+  machine-network:
+    driver: bridge

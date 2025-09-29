@@ -1,0 +1,56 @@
+name: 🏗️ Build and Test
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_DATABASE: MachineManagementDB_Test
+          MYSQL_ROOT_PASSWORD: test_password
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+
+    - name: ⚙️ Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '8.0.x'
+
+    - name: 📦 Restore dependencies
+      run: dotnet restore
+
+    - name: 🏗️ Build solution
+      run: dotnet build --configuration Release --no-restore
+
+    - name: 🧪 Run tests
+      run: dotnet test --configuration Release --no-build --verbosity normal
+      env:
+        ConnectionStrings__DefaultConnection: "Server=127.0.0.1;Database=MachineManagementDB_Test;Uid=root;Pwd=test_password;"
+
+    - name: 📊 Test API health
+      run: |
+        cd src/Backend/MachineManagement.API
+        dotnet run --configuration Release &
+        sleep 30
+        curl -f http://localhost:5000/health || exit 1
+      env:
+        ConnectionStrings__DefaultConnection: "Server=127.0.0.1;Database=MachineManagementDB_Test;Uid=root;Pwd=test_password;"
+        ASPNETCORE_ENVIRONMENT: Development
+        ASPNETCORE_URLS: "http://localhost:5000"
