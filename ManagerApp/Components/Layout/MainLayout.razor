@@ -1,0 +1,110 @@
+﻿@inherits LayoutComponentBase
+
+<MudThemeProvider />
+<MudDialogProvider />
+<MudSnackbarProvider />
+<MudPopoverProvider />
+
+<MudLayout>
+    <MudAppBar Color="Color.Primary" Fixed="true" Dense="true">
+        <MudIconButton Icon="Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@ToggleDrawer" />
+        <MudText Typo="Typo.h6" Class="ml-3">🏭 Industrial Machine Manager</MudText>
+        <MudSpacer />
+        
+        <!-- Connection Status Indicator -->
+        <MudChip T="string" Icon="@GetConnectionIcon()" Color="@GetConnectionColor()" Size="Size.Small" Class="mr-2">
+            @GetConnectionStatus()
+        </MudChip>
+        
+        <!-- Notification Bell -->
+        <MudBadge Content="@notificationCount" Color="Color.Error" Overlap="true" Class="mx-3">
+            <MudIconButton Icon="Icons.Material.Filled.Notifications" Color="Color.Inherit" />
+        </MudBadge>
+        
+        <!-- User Menu -->
+        <MudMenu Icon="Icons.Material.Filled.AccountCircle" Color="Color.Inherit" Dense="true" AnchorOrigin="Origin.BottomRight">
+            <MudMenuItem Icon="Icons.Material.Filled.Person">Profile</MudMenuItem>
+            <MudMenuItem Icon="Icons.Material.Filled.Settings">Settings</MudMenuItem>
+            <MudDivider />
+            <MudMenuItem Icon="Icons.Material.Filled.Logout">Logout</MudMenuItem>
+        </MudMenu>
+    </MudAppBar>
+    
+    <MudDrawer @bind-Open="drawerOpen" Elevation="1" Variant="@DrawerVariant.Mini" OpenMiniOnHover="true">
+        <MudDrawerHeader Class="pa-2">
+            <div class="d-flex align-center">
+                <MudIcon Icon="Icons.Material.Filled.Factory" Class="mr-2" />
+                <MudText Typo="Typo.h6">Control</MudText>
+            </div>
+        </MudDrawerHeader>
+        
+        <MudNavMenu>
+            <MudNavLink Href="/" Match="NavLinkMatch.All" Icon="Icons.Material.Filled.Dashboard">Dashboard</MudNavLink>
+            <MudNavLink Href="/machines" Icon="Icons.Material.Filled.PrecisionManufacturing">Machines</MudNavLink>
+            <MudNavLink Href="/commands" Icon="Icons.Material.Filled.Terminal">Commands</MudNavLink>
+            <MudNavLink Href="/logs" Icon="Icons.Material.Filled.Assignment">Logs</MudNavLink>
+            <MudNavLink Href="/reports" Icon="Icons.Material.Filled.Assessment">Reports</MudNavLink>
+            <MudDivider Class="my-2" />
+            <MudNavLink Href="/alerts" Icon="Icons.Material.Filled.Warning">
+                <div class="d-flex align-center justify-space-between">
+                    <span>Alerts</span>
+                    @if (alertCount > 0)
+                    {
+                        <MudBadge Content="@alertCount.ToString()" Color="Color.Error" Overlap="false">
+                            <div></div>
+                        </MudBadge>
+                    }
+                </div>
+            </MudNavLink>
+            <MudNavLink Href="/settings" Icon="Icons.Material.Filled.Settings">Settings</MudNavLink>
+        </MudNavMenu>
+    </MudDrawer>
+    
+    <MudMainContent>
+        <MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="pa-4">
+            @Body
+        </MudContainer>
+    </MudMainContent>
+</MudLayout>
+
+<div id="blazor-error-ui">
+    An unhandled error has occurred.
+    <a href="" class="reload">Reload</a>
+    <a class="dismiss">🗙</a>
+</div>
+
+@code {
+    private bool drawerOpen = true;
+    private int notificationCount = 0;
+    private int alertCount = 0;
+    private bool isConnected = false;
+
+    protected override void OnInitialized()
+    {
+        // Initialize connection status and counters
+        // These would be updated via SignalR in a real implementation
+        notificationCount = 3;
+        alertCount = 1;
+        isConnected = true;
+    }
+
+    private void ToggleDrawer()
+    {
+        drawerOpen = !drawerOpen;
+    }
+
+    private string GetConnectionIcon()
+    {
+        return isConnected ? Icons.Material.Filled.Wifi : Icons.Material.Filled.WifiOff;
+    }
+
+    private Color GetConnectionColor()
+    {
+        return isConnected ? Color.Success : Color.Error;
+    }
+
+    private string GetConnectionStatus()
+    {
+        return isConnected ? "Online" : "Offline";
+    }
+}
