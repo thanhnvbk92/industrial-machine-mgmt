@@ -1,0 +1,237 @@
+{
+  "format": 1,
+  "restore": {
+    "/home/runner/work/industrial-machine-mgmt/industrial-machine-mgmt/src/Backend/MachineManagement.API/MachineManagement.API.csproj": {}
+  },
+  "projects": {
+    "/home/runner/work/industrial-machine-mgmt/industrial-machine-mgmt/src/Backend/MachineManagement.API/MachineManagement.API.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/home/runner/work/industrial-machine-mgmt/industrial-machine-mgmt/src/Backend/MachineManagement.API/MachineManagement.API.csproj",
+        "projectName": "MachineManagement.API",
+        "projectPath": "/home/runner/work/industrial-machine-mgmt/industrial-machine-mgmt/src/Backend/MachineManagement.API/MachineManagement.API.csproj",
+        "packagesPath": "/home/runner/.nuget/packages/",
+        "outputPath": "/home/runner/work/industrial-machine-mgmt/industrial-machine-mgmt/src/Backend/MachineManagement.API/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/runner/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "/home/runner/work/industrial-machine-mgmt/industrial-machine-mgmt/src/Backend/MachineManagement.Core/MachineManagement.Core.csproj": {
+                "projectPath": "/home/runner/work/industrial-machine-mgmt/industrial-machine-mgmt/src/Backend/MachineManagement.Core/MachineManagement.Core.csproj"
+              },
+              "/home/runner/work/industrial-machine-mgmt/industrial-machine-mgmt/src/Backend/MachineManagement.Infrastructure/MachineManagement.Infrastructure.csproj": {
+                "projectPath": "/home/runner/work/industrial-machine-mgmt/industrial-machine-mgmt/src/Backend/MachineManagement.Infrastructure/MachineManagement.Infrastructure.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.300"
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "Microsoft.AspNetCore.OpenApi": {
+              "target": "Package",
+              "version": "[8.0.20, )"
+            },
+            "Serilog.Extensions.Logging": {
+              "target": "Package",
+              "version": "[9.0.2, )"
+            },
+            "Serilog.Sinks.Console": {
+              "target": "Package",
+              "version": "[6.0.0, )"
+            },
+            "Serilog.Sinks.File": {
+              "target": "Package",
+              "version": "[7.0.0, )"
+            },
+            "Swashbuckle.AspNetCore": {
+              "target": "Package",
+              "version": "[6.6.2, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/9.0.305/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/home/runner/work/industrial-machine-mgmt/industrial-machine-mgmt/src/Backend/MachineManagement.Core/MachineManagement.Core.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/home/runner/work/industrial-machine-mgmt/industrial-machine-mgmt/src/Backend/MachineManagement.Core/MachineManagement.Core.csproj",
+        "projectName": "MachineManagement.Core",
+        "projectPath": "/home/runner/work/industrial-machine-mgmt/industrial-machine-mgmt/src/Backend/MachineManagement.Core/MachineManagement.Core.csproj",
+        "packagesPath": "/home/runner/.nuget/packages/",
+        "outputPath": "/home/runner/work/industrial-machine-mgmt/industrial-machine-mgmt/src/Backend/MachineManagement.Core/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/runner/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.300"
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/9.0.305/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/home/runner/work/industrial-machine-mgmt/industrial-machine-mgmt/src/Backend/MachineManagement.Infrastructure/MachineManagement.Infrastructure.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/home/runner/work/industrial-machine-mgmt/industrial-machine-mgmt/src/Backend/MachineManagement.Infrastructure/MachineManagement.Infrastructure.csproj",
+        "projectName": "MachineManagement.Infrastructure",
+        "projectPath": "/home/runner/work/industrial-machine-mgmt/industrial-machine-mgmt/src/Backend/MachineManagement.Infrastructure/MachineManagement.Infrastructure.csproj",
+        "packagesPath": "/home/runner/.nuget/packages/",
+        "outputPath": "/home/runner/work/industrial-machine-mgmt/industrial-machine-mgmt/src/Backend/MachineManagement.Infrastructure/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/runner/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "/home/runner/work/industrial-machine-mgmt/industrial-machine-mgmt/src/Backend/MachineManagement.Core/MachineManagement.Core.csproj": {
+                "projectPath": "/home/runner/work/industrial-machine-mgmt/industrial-machine-mgmt/src/Backend/MachineManagement.Core/MachineManagement.Core.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.300"
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[9.0.9, )"
+            },
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[9.0.9, )"
+            },
+            "Pomelo.EntityFrameworkCore.MySql": {
+              "target": "Package",
+              "version": "[9.0.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/9.0.305/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}
