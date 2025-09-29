@@ -1,0 +1,271 @@
+﻿@page "/"
+@inject IMachineService MachineService
+@inject ILogService LogService
+@inject ICommandService CommandService
+
+<PageTitle>Dashboard - Industrial Machine Manager</PageTitle>
+
+<MudText Typo="Typo.h4" GutterBottom="true">
+    <MudIcon Icon="Icons.Material.Filled.Dashboard" Class="mr-2" />
+    Dashboard
+</MudText>
+
+<!-- Key Performance Indicators -->
+<MudGrid Class="mb-4">
+    <MudItem xs="12" sm="6" md="3">
+        <MudCard Elevation="4">
+            <MudCardContent Class="pa-4">
+                <div class="d-flex align-center">
+                    <MudIcon Icon="Icons.Material.Filled.PrecisionManufacturing" Color="Color.Primary" Size="Size.Large" Class="mr-3" />
+                    <div>
+                        <MudText Typo="Typo.body2" Color="Color.Secondary">Total Machines</MudText>
+                        <MudText Typo="Typo.h4" Color="Color.Primary">@totalMachines</MudText>
+                    </div>
+                </div>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+    
+    <MudItem xs="12" sm="6" md="3">
+        <MudCard Elevation="4">
+            <MudCardContent Class="pa-4">
+                <div class="d-flex align-center">
+                    <MudIcon Icon="Icons.Material.Filled.CheckCircle" Color="Color.Success" Size="Size.Large" Class="mr-3" />
+                    <div>
+                        <MudText Typo="Typo.body2" Color="Color.Secondary">Online</MudText>
+                        <MudText Typo="Typo.h4" Color="Color.Success">@onlineMachines</MudText>
+                    </div>
+                </div>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+    
+    <MudItem xs="12" sm="6" md="3">
+        <MudCard Elevation="4">
+            <MudCardContent Class="pa-4">
+                <div class="d-flex align-center">
+                    <MudIcon Icon="Icons.Material.Filled.Warning" Color="Color.Warning" Size="Size.Large" Class="mr-3" />
+                    <div>
+                        <MudText Typo="Typo.body2" Color="Color.Secondary">Issues</MudText>
+                        <MudText Typo="Typo.h4" Color="Color.Warning">@issueCount</MudText>
+                    </div>
+                </div>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+    
+    <MudItem xs="12" sm="6" md="3">
+        <MudCard Elevation="4">
+            <MudCardContent Class="pa-4">
+                <div class="d-flex align-center">
+                    <MudIcon Icon="Icons.Material.Filled.Schedule" Color="Color.Info" Size="Size.Large" Class="mr-3" />
+                    <div>
+                        <MudText Typo="Typo.body2" Color="Color.Secondary">Uptime</MudText>
+                        <MudText Typo="Typo.h4" Color="Color.Info">@uptimePercentage%</MudText>
+                    </div>
+                </div>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+</MudGrid>
+
+<MudGrid>
+    <!-- Machine Status Overview -->
+    <MudItem xs="12" md="8">
+        <MudCard Elevation="4" Class="mb-4">
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudText Typo="Typo.h6">Machine Status Overview</MudText>
+                </CardHeaderContent>
+                <CardHeaderActions>
+                    <MudButton StartIcon="Icons.Material.Filled.Refresh" Color="Color.Primary" OnClick="RefreshData">
+                        Refresh
+                    </MudButton>
+                </CardHeaderActions>
+            </MudCardHeader>
+            <MudCardContent>
+                @if (machines?.Any() == true)
+                {
+                    <MudSimpleTable Hover="true" Dense="true">
+                        <thead>
+                            <tr>
+                                <th>Machine</th>
+                                <th>Status</th>
+                                <th>Last Heartbeat</th>
+                                <th>Location</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var machine in machines.Take(8))
+                            {
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-center">
+                                            <MudIcon Icon="Icons.Material.Filled.Memory" Class="mr-2" />
+                                            <div>
+                                                <MudText Typo="Typo.body1">@machine.Name</MudText>
+                                                <MudText Typo="Typo.caption" Color="Color.Secondary">@machine.Description</MudText>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <MudChip T="string" Color="@GetStatusColor(machine.Status)" Size="Size.Small">
+                                            @machine.Status
+                                        </MudChip>
+                                    </td>
+                                    <td>
+                                        <MudText Typo="Typo.body2">
+                                            @machine.LastHeartbeat.ToString("HH:mm:ss")
+                                        </MudText>
+                                        <MudText Typo="Typo.caption" Color="Color.Secondary">
+                                            @GetTimeAgo(machine.LastHeartbeat)
+                                        </MudText>
+                                    </td>
+                                    <td>@machine.Location</td>
+                                    <td>
+                                        <MudIconButton Icon="Icons.Material.Filled.Visibility" Size="Size.Small" Color="Color.Primary" />
+                                        <MudIconButton Icon="Icons.Material.Filled.Settings" Size="Size.Small" Color="Color.Default" />
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </MudSimpleTable>
+                }
+                else
+                {
+                    <div class="d-flex flex-column align-center pa-8">
+                        <MudIcon Icon="Icons.Material.Filled.PrecisionManufacturing" Color="Color.Secondary" Style="font-size: 4rem;" />
+                        <MudText Typo="Typo.h6" Color="Color.Secondary" Class="mt-4">No machines found</MudText>
+                        <MudText Typo="Typo.body2" Color="Color.Secondary">Add your first machine to get started</MudText>
+                        <MudButton StartIcon="Icons.Material.Filled.Add" Color="Color.Primary" Class="mt-4" Href="/machines">
+                            Add Machine
+                        </MudButton>
+                    </div>
+                }
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+
+    <!-- Recent Activity Feed -->
+    <MudItem xs="12" md="4">
+        <MudCard Elevation="4" Class="mb-4">
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudText Typo="Typo.h6">Recent Activity</MudText>
+                </CardHeaderContent>
+            </MudCardHeader>
+            <MudCardContent Style="max-height: 400px; overflow-y: auto;">
+                @if (recentLogs?.Any() == true)
+                {
+                    @foreach (var log in recentLogs.Take(10))
+                    {
+                        <div class="d-flex align-start mb-3">
+                            <MudIcon Icon="@GetLogIcon(log.Level)" Color="@GetLogColor(log.Level)" Size="Size.Small" Class="mr-2 mt-1" />
+                            <div class="flex-grow-1">
+                                <MudText Typo="Typo.body2">@log.Message</MudText>
+                                <MudText Typo="Typo.caption" Color="Color.Secondary">
+                                    @log.Machine?.Name - @log.Timestamp.ToString("HH:mm:ss")
+                                </MudText>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="text-center pa-4">
+                        <MudIcon Icon="Icons.Material.Filled.Timeline" Color="Color.Secondary" Style="font-size: 3rem;" />
+                        <MudText Typo="Typo.body2" Color="Color.Secondary" Class="mt-2">No recent activity</MudText>
+                    </div>
+                }
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+</MudGrid>
+
+@code {
+    private List<Machine>? machines;
+    private List<LogEntry>? recentLogs;
+    private int totalMachines = 0;
+    private int onlineMachines = 0;
+    private int issueCount = 0;
+    private int uptimePercentage = 95;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadData();
+    }
+
+    private async Task LoadData()
+    {
+        try
+        {
+            machines = await MachineService.GetAllMachinesAsync();
+            recentLogs = await LogService.GetLogsAsync(page: 1, pageSize: 10);
+
+            totalMachines = machines?.Count ?? 0;
+            onlineMachines = machines?.Count(m => m.Status == MachineStatus.Online) ?? 0;
+            issueCount = machines?.Count(m => m.Status == MachineStatus.Warning || m.Status == MachineStatus.Error) ?? 0;
+
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            // In a real app, you'd log this and show a user-friendly message
+            Console.WriteLine($"Error loading dashboard data: {ex.Message}");
+        }
+    }
+
+    private async Task RefreshData()
+    {
+        await LoadData();
+    }
+
+    private Color GetStatusColor(MachineStatus status)
+    {
+        return status switch
+        {
+            MachineStatus.Online => Color.Success,
+            MachineStatus.Warning => Color.Warning,
+            MachineStatus.Error => Color.Error,
+            MachineStatus.Maintenance => Color.Info,
+            _ => Color.Default
+        };
+    }
+
+    private Color GetLogColor(LogLevel level)
+    {
+        return level switch
+        {
+            LogLevel.Error => Color.Error,
+            LogLevel.Warning => Color.Warning,
+            LogLevel.Info => Color.Info,
+            _ => Color.Default
+        };
+    }
+
+    private string GetLogIcon(LogLevel level)
+    {
+        return level switch
+        {
+            LogLevel.Error => Icons.Material.Filled.Error,
+            LogLevel.Warning => Icons.Material.Filled.Warning,
+            LogLevel.Info => Icons.Material.Filled.Info,
+            _ => Icons.Material.Filled.Circle
+        };
+    }
+
+    private string GetTimeAgo(DateTime dateTime)
+    {
+        var timeSpan = DateTime.UtcNow - dateTime;
+        
+        if (timeSpan.TotalMinutes < 1)
+            return "Just now";
+        if (timeSpan.TotalMinutes < 60)
+            return $"{(int)timeSpan.TotalMinutes}m ago";
+        if (timeSpan.TotalHours < 24)
+            return $"{(int)timeSpan.TotalHours}h ago";
+        
+        return $"{(int)timeSpan.TotalDays}d ago";
+    }
+}
